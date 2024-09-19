@@ -89,7 +89,6 @@ async def create_settings_lighting(data: SettingsLightingSchema):
 
     await sync_to_async(new_setting.save)()
 
-    # Convert Django model instance to dict
     response_data = {
         "pool_setting": new_setting.poolsetting_id if new_setting.poolsetting else None,
         "lighting_regulation": new_setting.lighting_regulation,
@@ -113,8 +112,28 @@ async def create_settings_lighting(data: SettingsLightingSchema):
 
     return response_data
 
+    response_data = {
+        "pool_number": new_setting.poolsetting.poolnumber if new_setting.poolsetting else None,
+        "lighting_regulation": new_setting.lighting_regulation,
+        "lighting_active": new_setting.lighting_active,
+        "lighting_schedule": new_setting.lighting_schedule,
+        "lighting_start_time": new_setting.lighting_start_time,
+        "lighting_stop_time": new_setting.lighting_stop_time,
+        "lighting_monday": new_setting.lighting_monday,
+        "lighting_tuesday": new_setting.lighting_tuesday,
+        "lighting_wednesday": new_setting.lighting_wednesday,
+        "lighting_thursday": new_setting.lighting_thursday,
+        "lighting_friday": new_setting.lighting_friday,
+        "lighting_saturday": new_setting.lighting_saturday,
+        "lighting_sunday": new_setting.lighting_sunday,
+        "lighting_on_deck_closed": new_setting.lighting_on_deck_closed,
+        "lighting_configuration": LightingConfigurationEnum(new_setting.lighting_configuration),
+        "lighting_colour_stl": LightingColour(new_setting.lighting_colour_stl),
+        "lighting_rgb_stl_time": new_setting.lighting_rgb_stl_time,
+        "lighting_next_colour": new_setting.lighting_next_colour
+    }
 
-from asgiref.sync import sync_to_async
+    return response_data
 
 
 @router.get("/{settings_lighting_id}", response_model=SettingsLightingSchema)
